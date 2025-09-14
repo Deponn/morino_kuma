@@ -1,73 +1,73 @@
-# This is an example mods.toml file. It contains the data relating to the loading mods.
-# There are several mandatory fields (#mandatory), and many more that are optional (#optional).
-# The overall format is standard TOML format, v0.5.0.
-# Note that there are a couple of TOML lists in this file.
-# Find more information on toml format here:  https://github.com/toml-lang/toml
-# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
+# これはmods.tomlファイルの例です。modの読み込みに関連するデータが含まれています。
+# いくつかの必須フィールド（#mandatory）と、多くのオプションのフィールド（#optional）があります。
+# 全体の形式は標準のTOML形式、v0.5.0です。
+# このファイルにはいくつかのTOMLリストがあることに注意してください。
+# TOML形式の詳細についてはこちらを参照してください: https://github.com/toml-lang/toml
+# 読み込むmodローダーのタイプの名前 - 通常のFML @Mod modの場合、javafmlであるべきです
 modLoader="javafml" #mandatory
-# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="${loader_version_range}" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
-# The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
-# Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
+# 該当するmodローダーに一致するバージョン範囲 - 通常のFML @Modの場合、Forgeバージョンになります
+loaderVersion="${loader_version_range}" #mandatory これは通常、MinecraftのバージョンごとにForgeによって更新されます。バージョンのリストについてはダウンロードページを参照してください。
+# modのライセンス。これは必須のメタデータで、再配布プロパティの理解を容易にします。
+# オプションを確認してください: https://choosealicense.com/。All rights reservedがデフォルトの著作権立場であり、ここでもデフォルトです。
 license="${mod_license}"
-# A URL to refer people to when problems occur with this mod
+# このmodで問題が発生した場合に人々が参照するURL
 #issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
-# If your mod is purely client-side and has no multiplayer functionality (be it dedicated servers or Open to LAN),
-# set this to true, and Forge will set the correct displayTest for you and skip loading your mod on dedicated servers.
-#clientSideOnly=true #optional - defaults to false if absent
-# A list of mods - how many allowed here is determined by the individual mod loader
+# modが純粋にクライアントサイドでマルチプレイ機能がない場合（専用サーバーやOpen to LANを含む）、
+# これをtrueに設定すると、Forgeが正しいdisplayTestを設定し、専用サーバーでのmodの読み込みをスキップします。
+#clientSideOnly=true #optional - 存在しない場合、デフォルトはfalseです
+# modのリスト - ここで許可される数は個々のmodローダーによって決定されます
 [[mods]] #mandatory
-# The modid of the mod
+# modのmodid
 modId="${mod_id}" #mandatory
-# The version number of the mod
+# modのバージョン番号
 version="${mod_version}" #mandatory
-# A display name for the mod
+# modの表示名
 displayName="${mod_name}" #mandatory
-# A URL to query for updates for this mod. See the JSON update specification https://docs.minecraftforge.net/en/latest/misc/updatechecker/
+# このmodの更新をクエリするURL。JSON更新仕様を参照してください: https://docs.minecraftforge.net/en/latest/misc/updatechecker/
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
-# A URL for the "homepage" for this mod, displayed in the mod UI
+# このmodの「ホームページ」のURL、mod UIに表示されます
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
-# A file name (in the root of the mod JAR) containing a logo for display
+# 表示用のロゴを含むmod JARのルート内のファイル名
 #logoFile="examplemod.png" #optional
-# A text field displayed in the mod UI
+# mod UIに表示されるテキストフィールド
 #credits="" #optional
-# A text field displayed in the mod UI
+# mod UIに表示されるテキストフィールド
 authors="${mod_authors}" #optional
-# Display Test controls the display for your mod in the server connection screen
-# MATCH_VERSION means that your mod will cause a red X if the versions on client and server differ. This is the default behaviour and should be what you choose if you have server and client elements to your mod.
-# IGNORE_SERVER_VERSION means that your mod will not cause a red X if it's present on the server but not on the client. This is what you should use if you're a server only mod.
-# IGNORE_ALL_VERSION means that your mod will not cause a red X if it's present on the client or the server. This is a special case and should only be used if your mod has no server component.
-# NONE means that no display test is set on your mod. You need to do this yourself, see IExtensionPoint.DisplayTest for more information. You can define any scheme you wish with this value.
-# IMPORTANT NOTE: this is NOT an instruction as to which environments (CLIENT or DEDICATED SERVER) your mod loads on. Your mod should load (and maybe do nothing!) whereever it finds itself.
-#displayTest="MATCH_VERSION" # if nothing is specified, MATCH_VERSION is the default when clientSideOnly=false, otherwise IGNORE_ALL_VERSION when clientSideOnly=true (#optional)
+# Display Testはサーバー接続画面でのmodの表示を制御します
+# MATCH_VERSIONは、クライアントとサーバーのバージョンが異なる場合、modが赤いXを引き起こすことを意味します。これはデフォルトの動作で、modにサーバーとクライアントの要素がある場合に選択すべきです。
+# IGNORE_SERVER_VERSIONは、modがサーバーに存在するがクライアントにない場合、赤いXを引き起こさないことを意味します。これはサーバー専用modの場合に使用すべきです。
+# IGNORE_ALL_VERSIONは、modがクライアントまたはサーバーに存在する場合、赤いXを引き起こさないことを意味します。これは特別なケースで、modにサーバーコンポーネントがない場合にのみ使用すべきです。
+# NONEは、modにdisplay testが設定されていないことを意味します。これを自分で設定する必要があります。詳細についてはIExtensionPoint.DisplayTestを参照してください。この値で任意のスキームを定義できます。
+# 重要な注意: これはmodがどの環境（CLIENTまたはDEDICATED SERVER）で読み込まれるかの指示ではありません。modはどこにいても読み込まれるべきです（そして何もしないかもしれません！）。
+#displayTest="MATCH_VERSION" # 指定がない場合、clientSideOnly=falseの場合はMATCH_VERSIONがデフォルト、clientSideOnly=trueの場合はIGNORE_ALL_VERSIONがデフォルトです（#optional）
 
-# The description text for the mod (multi line!) (#mandatory)
+# modの説明テキスト（複数行！）（#mandatory）
 description='''${mod_description}'''
-# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+# 依存関係 - 特定のmodidの依存関係を示すために.を使用します。依存関係はオプションです。
 [[dependencies.${mod_id}]] #optional
-    # the modid of the dependency
+    # 依存関係のmodid
     modId="forge" #mandatory
-    # Does this dependency have to exist - if not, ordering below must be specified
+    # この依存関係が存在する必要があるかどうか - ない場合、下記のorderingを指定する必要があります
     mandatory=true #mandatory
-    # The version range of the dependency
+    # 依存関係のバージョン範囲
     versionRange="${forge_version_range}" #mandatory
-    # An ordering relationship for the dependency - BEFORE or AFTER required if the dependency is not mandatory
-    # BEFORE - This mod is loaded BEFORE the dependency
-    # AFTER - This mod is loaded AFTER the dependency
+    # 依存関係の順序関係 - 依存関係が必須でない場合、BEFOREまたはAFTERが必要です
+    # BEFORE - このmodは依存関係の前に読み込まれます
+    # AFTER - このmodは依存関係の後に読み込まれます
     ordering="NONE"
-    # Side this dependency is applied on - BOTH, CLIENT, or SERVER
+    # この依存関係が適用される側 - BOTH、CLIENT、またはSERVER
     side="BOTH"
-# Here's another dependency
+# 別の依存関係
 [[dependencies.${mod_id}]]
     modId="minecraft"
     mandatory=true
-    # This version range declares a minimum of the current minecraft version up to but not including the next major version
+    # このバージョン範囲は現在のMinecraftバージョンの最小値を宣言し、次のメジャーバージョンを含まない
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 
-# Features are specific properties of the game environment, that you may want to declare you require. This example declares
-# that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't
-# stop your mod loading on the server for example.
+# Featuresはゲーム環境の特定のプロパティで、必要とするものを宣言できます。この例では、
+# modがGLバージョン3.2以上を必要とすることを宣言しています。他の機能も追加されます。これらは側を認識するので、これを宣言しても
+# 例えばサーバーでのmodの読み込みを停止しません。
 #[features.${mod_id}]
 #openGLVersion="[3.2,)"

@@ -13,28 +13,28 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Forge's config APIs
+// 設定クラスの例です。これは必須ではありませんが、設定を整理するために持つことをおすすめします。
+// Forgeの設定APIの使用方法を示します
 @Mod.EventBusSubscriber(modid = ExampleMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config
 {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     private static final ForgeConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER
-            .comment("Whether to log the dirt block on common setup")
+            .comment("共通セットアップで土ブロックをログに記録するかどうか")
             .define("logDirtBlock", true);
 
     private static final ForgeConfigSpec.IntValue MAGIC_NUMBER = BUILDER
-            .comment("A magic number")
+            .comment("魔法の数字")
             .defineInRange("magicNumber", 42, 0, Integer.MAX_VALUE);
 
     public static final ForgeConfigSpec.ConfigValue<String> MAGIC_NUMBER_INTRODUCTION = BUILDER
-            .comment("What you want the introduction message to be for the magic number")
+            .comment("魔法の数字の紹介メッセージを何にするか")
             .define("magicNumberIntroduction", "The magic number is... ");
 
-    // a list of strings that are treated as resource locations for items
+    // アイテムのリソースロケーションとして扱われる文字列のリスト
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
-            .comment("A list of items to log on common setup.")
+            .comment("共通セットアップでログに記録するアイテムのリスト。")
             .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
 
     static final ForgeConfigSpec SPEC = BUILDER.build();
