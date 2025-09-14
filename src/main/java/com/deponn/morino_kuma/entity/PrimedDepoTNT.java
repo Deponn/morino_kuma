@@ -43,7 +43,7 @@ public class PrimedDepoTNT extends PrimedTnt {
                         getX(), getY(), getZ(),
                         SoundEvents.GENERIC_EXPLODE,
                         SoundSource.BLOCKS,
-                        4.0F,  // 音量
+                        2.0F,  // 音量
                         1.0F   // ピッチ
                 );
             }
@@ -58,7 +58,7 @@ public class PrimedDepoTNT extends PrimedTnt {
     private void generateForest(Level level, BlockPos center, int radius) {
         RandomSource random = level.random;
 
-        for (int i = 0; i < 1000; i++) { // 200スポット試行
+        for (int i = 0; i < 2000; i++) { // 200スポット試行
             int dx = random.nextInt(radius * 2 + 1) - radius;
             int dz = random.nextInt(radius * 2 + 1) - radius;
             BlockPos basePos = center.offset(dx, 0, dz);
@@ -81,7 +81,7 @@ public class PrimedDepoTNT extends PrimedTnt {
                 }
 
                 // 10%で木を生やす
-                if (random.nextFloat() < 0.1f) {
+                if (random.nextFloat() < 0.03f) {
                     growTree(level, ground.above(), random);
                 }
             }
