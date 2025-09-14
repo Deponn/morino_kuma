@@ -1,6 +1,7 @@
 package com.deponn.morino_kuma;
 
 import com.deponn.morino_kuma.block.DepoTNT;
+import com.deponn.morino_kuma.item.DepoTntItem;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
@@ -47,9 +48,8 @@ public class MorinoKuma
 // 名前空間とパスを組み合わせたid "morino_kuma:depo_tnt"で新しいブロックを作成します
 public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt", DepoTNT::new);
     // 名前空間とパスを組み合わせたid "morino_kuma:depo_tnt"で新しいBlockItemを作成します
-    public static final RegistryObject<Item> DEPO_TNT_ITEM = ITEMS.register("depo_tnt", () ->
-            new BlockItem(DEPO_TNT.get(), new Item.Properties()));
-
+    public static final RegistryObject<Item> DEPO_TNT_ITEM = ITEMS.register("depo_tnt",
+            () -> new DepoTntItem(new Item.Properties()));
 
     public MorinoKuma(FMLJavaModLoadingContext context)
     {
