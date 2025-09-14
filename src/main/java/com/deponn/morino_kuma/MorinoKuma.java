@@ -1,5 +1,6 @@
 package com.deponn.morino_kuma;
 
+import com.deponn.morino_kuma.block.DepoTNT;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
@@ -43,22 +44,12 @@ public class MorinoKuma
 // "morino_kuma"名前空間の下で登録されるすべてのCreativeModeTabsを保持するDeferred Registerを作成します
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID);
 
-// 名前空間とパスを組み合わせたid "morino_kuma:example_block"で新しいブロックを作成します
-    public static final RegistryObject<Block> EXAMPLE_BLOCK = BLOCKS.register("example_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
-// 名前空間とパスを組み合わせたid "morino_kuma:example_block"で新しいBlockItemを作成します
-    public static final RegistryObject<Item> EXAMPLE_BLOCK_ITEM = ITEMS.register("example_block", () -> new BlockItem(EXAMPLE_BLOCK.get(), new Item.Properties()));
+// 名前空間とパスを組み合わせたid "morino_kuma:depo_tnt"で新しいブロックを作成します
+public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt", DepoTNT::new);
+    // 名前空間とパスを組み合わせたid "morino_kuma:depo_tnt"で新しいBlockItemを作成します
+    public static final RegistryObject<Item> DEPO_TNT_ITEM = ITEMS.register("depo_tnt", () ->
+            new BlockItem(DEPO_TNT.get(), new Item.Properties()));
 
-// id "morino_kuma:example_id"で新しい食品アイテムを作成します、栄養価1、満腹度2
-    public static final RegistryObject<Item> EXAMPLE_ITEM = ITEMS.register("example_item", () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
-            .alwaysEat().nutrition(1).saturationMod(2f).build())));
-
-// 例のアイテム用のid "morino_kuma:example_tab"のクリエイティブタブを作成します、戦闘タブの後に配置されます
-    public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
-            .withTabsBefore(CreativeModeTabs.COMBAT)
-            .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
-            .displayItems((parameters, output) -> {
-                output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
-            }).build());
 
     public MorinoKuma(FMLJavaModLoadingContext context)
     {
@@ -101,7 +92,7 @@ public class MorinoKuma
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
-            event.accept(EXAMPLE_BLOCK_ITEM);
+            event.accept(DEPO_TNT_ITEM);
     }
 
 // SubscribeEventを使用して、Event Busが呼び出すメソッドを発見できるようにします

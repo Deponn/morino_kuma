@@ -1,0 +1,8 @@
+{
+  "parent": "block/tnt",
+  "textures": {
+    "bottom": "morino_kuma:block/depo_tnt_bottom",
+    "top": "morino_kuma:block/depo_tnt_top",
+    "side": "morino_kuma:block/depo_tnt_side"
+  }
+}
