@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package com.deponn.morino_kuma;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -29,30 +29,30 @@ import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
 // この値はMETA-INF/mods.tomlファイルのエントリと一致する必要があります
-@Mod(ExampleMod.MODID)
-public class ExampleMod
+@Mod(MorinoKuma.MOD_ID)
+public class MorinoKuma
 {
 // すべての参照で共通の場所にmod idを定義します
-    public static final String MODID = "examplemod";
+    public static final String MOD_ID = "morino_kuma";
 // slf4jロガーを直接参照します
     private static final Logger LOGGER = LogUtils.getLogger();
-// "examplemod"名前空間の下で登録されるすべてのブロックを保持するDeferred Registerを作成します
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
-// "examplemod"名前空間の下で登録されるすべてのアイテムを保持するDeferred Registerを作成します
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-// "examplemod"名前空間の下で登録されるすべてのCreativeModeTabsを保持するDeferred Registerを作成します
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+// "morino_kuma"名前空間の下で登録されるすべてのブロックを保持するDeferred Registerを作成します
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID);
+// "morino_kuma"名前空間の下で登録されるすべてのアイテムを保持するDeferred Registerを作成します
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
+// "morino_kuma"名前空間の下で登録されるすべてのCreativeModeTabsを保持するDeferred Registerを作成します
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID);
 
-// 名前空間とパスを組み合わせたid "examplemod:example_block"で新しいブロックを作成します
+// 名前空間とパスを組み合わせたid "morino_kuma:example_block"で新しいブロックを作成します
     public static final RegistryObject<Block> EXAMPLE_BLOCK = BLOCKS.register("example_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
-// 名前空間とパスを組み合わせたid "examplemod:example_block"で新しいBlockItemを作成します
+// 名前空間とパスを組み合わせたid "morino_kuma:example_block"で新しいBlockItemを作成します
     public static final RegistryObject<Item> EXAMPLE_BLOCK_ITEM = ITEMS.register("example_block", () -> new BlockItem(EXAMPLE_BLOCK.get(), new Item.Properties()));
 
-// id "examplemod:example_id"で新しい食品アイテムを作成します、栄養価1、満腹度2
+// id "morino_kuma:example_id"で新しい食品アイテムを作成します、栄養価1、満腹度2
     public static final RegistryObject<Item> EXAMPLE_ITEM = ITEMS.register("example_item", () -> new Item(new Item.Properties().food(new FoodProperties.Builder()
             .alwaysEat().nutrition(1).saturationMod(2f).build())));
 
-// 例のアイテム用のid "examplemod:example_tab"のクリエイティブタブを作成します、戦闘タブの後に配置されます
+// 例のアイテム用のid "morino_kuma:example_tab"のクリエイティブタブを作成します、戦闘タブの後に配置されます
     public static final RegistryObject<CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
@@ -60,7 +60,7 @@ public class ExampleMod
                 output.accept(EXAMPLE_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
             }).build());
 
-    public ExampleMod(FMLJavaModLoadingContext context)
+    public MorinoKuma(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
 
@@ -113,7 +113,7 @@ public class ExampleMod
     }
 
 // EventBusSubscriberを使用して、@SubscribeEventで注釈されたクラスのすべての静的メソッドを自動的に登録します
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
         @SubscribeEvent
