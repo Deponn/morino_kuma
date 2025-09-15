@@ -17,6 +17,7 @@ public class DepoTntItem extends Item {
         super(properties);
     }
 
+    // 使用時に即時着火したものが飛ぶ
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);

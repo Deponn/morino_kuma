@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -23,7 +22,9 @@ public class DepoTNT extends Block {
         super(BlockBehaviour.Properties.copy(Blocks.TNT));
     }
 
-
+    /**
+     * 火打石で着火した場合
+     */
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos,
                                  Player player, InteractionHand hand, BlockHitResult hit) {
@@ -47,6 +48,7 @@ public class DepoTNT extends Block {
     }
 
     /**
+     * 着火時の挙動を指定
      * PrimedTnt を生成して fuse を設定するヘルパー。
      * fuse はティック数（20ティック＝1秒）で指定。
      */

@@ -11,16 +11,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -35,26 +30,25 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.antlr.v4.runtime.atn.BlockEndState;
 import org.slf4j.Logger;
 
 // この値はMETA-INF/mods.tomlファイルのエントリと一致する必要があります
 @Mod(MorinoKuma.MOD_ID)
 public class MorinoKuma
 {
-// すべての参照で共通の場所にmod idを定義します
+    // すべての参照で共通の場所にmod idを定義します
     public static final String MOD_ID = "morino_kuma";
-// slf4jロガーを直接参照します
+    // slf4jロガーを直接参照します
     private static final Logger LOGGER = LogUtils.getLogger();
-// "morino_kuma"名前空間の下で登録されるすべてのブロックを保持するDeferred Registerを作成します
+    // "morino_kuma"名前空間の下で登録されるすべてのブロックを保持するDeferred Registerを作成します
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID);
-// "morino_kuma"名前空間の下で登録されるすべてのアイテムを保持するDeferred Registerを作成します
+    // "morino_kuma"名前空間の下で登録されるすべてのアイテムを保持するDeferred Registerを作成します
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
-// "morino_kuma"名前空間の下で登録されるすべてのCreativeModeTabsを保持するDeferred Registerを作成します
+    // "morino_kuma"名前空間の下で登録されるすべてのCreativeModeTabsを保持するDeferred Registerを作成します
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID);
 
-// 名前空間とパスを組み合わせたid "morino_kuma:depo_tnt"で新しいブロックを作成します
-public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt", DepoTNT::new);
+    // 名前空間とパスを組み合わせたid "morino_kuma:depo_tnt"で新しいブロックを作成します
+    public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt", DepoTNT::new);
     // 名前空間とパスを組み合わせたid "morino_kuma:depo_tnt"で新しいBlockItemを作成します
     public static final RegistryObject<Item> DEPO_TNT_ITEM = ITEMS.register("depo_tnt",
             () -> new BlockItem(DEPO_TNT.get(), new Item.Properties()));
@@ -65,25 +59,25 @@ public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt",
     {
         IEventBus modEventBus = context.getModEventBus();
 
-// modloading用のcommonSetupメソッドを登録します
+        // modloading用のcommonSetupメソッドを登録します
         modEventBus.addListener(this::commonSetup);
 
-// ブロックが登録されるようにDeferred Registerをmodイベントバスに登録します
+        // ブロックが登録されるようにDeferred Registerをmodイベントバスに登録します
         BLOCKS.register(modEventBus);
-// アイテムが登録されるようにDeferred Registerをmodイベントバスに登録します
+        // アイテムが登録されるようにDeferred Registerをmodイベントバスに登録します
         ITEMS.register(modEventBus);
-// タブが登録されるようにDeferred Registerをmodイベントバスに登録します
+        // タブが登録されるようにDeferred Registerをmodイベントバスに登録します
         CREATIVE_MODE_TABS.register(modEventBus);
 
-// サーバーや他の興味のあるゲームイベントに自分自身を登録します
+        // サーバーや他の興味のあるゲームイベントに自分自身を登録します
         MinecraftForge.EVENT_BUS.register(this);
 
-// アイテムをクリエイティブタブに登録します
+        // アイテムをクリエイティブタブに登録します
         modEventBus.addListener(this::addCreative);
 
         modEventBus.addListener(this::setup);
 
-// Forgeが設定ファイルを作成して読み込むことができるように、modのForgeConfigSpecを登録します
+        // Forgeが設定ファイルを作成して読み込むことができるように、modのForgeConfigSpecを登録します
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
@@ -100,7 +94,7 @@ public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt",
         Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
     }
 
-// 例のブロックアイテムを建築ブロックタブに追加します
+    // 例のブロックアイテムを建築ブロックタブに追加します
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
@@ -109,7 +103,7 @@ public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt",
         }
     }
 
-// SubscribeEventを使用して、Event Busが呼び出すメソッドを発見できるようにします
+    // SubscribeEventを使用して、Event Busが呼び出すメソッドを発見できるようにします
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
@@ -117,7 +111,7 @@ public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt",
         LOGGER.info("HELLO from server starting");
     }
 
-// EventBusSubscriberを使用して、@SubscribeEventで注釈されたクラスのすべての静的メソッドを自動的に登録します
+    // EventBusSubscriberを使用して、@SubscribeEventで注釈されたクラスのすべての静的メソッドを自動的に登録します
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {

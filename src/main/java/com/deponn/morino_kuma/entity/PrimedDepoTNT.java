@@ -22,6 +22,7 @@ public class PrimedDepoTNT extends PrimedTnt {
         super(level, x, y, z, owner);
     }
 
+    // 爆発時
     @Override
     public void explode() {
         if (!level().isClientSide) {
@@ -55,6 +56,7 @@ public class PrimedDepoTNT extends PrimedTnt {
         }
     }
 
+    // 森を作る挙動
     private void generateForest(Level level, BlockPos center, int radius) {
         RandomSource random = level.random;
 
@@ -88,6 +90,7 @@ public class PrimedDepoTNT extends PrimedTnt {
         }
     }
 
+    // 木をはやす
     private void growTree(Level level, BlockPos pos, RandomSource random) {
         if (!(level instanceof ServerLevel serverLevel)) {
             return; // サーバー側でのみ実行
