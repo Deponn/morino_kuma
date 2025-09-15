@@ -1,19 +1,26 @@
 package com.deponn.morino_kuma;
 
 import com.deponn.morino_kuma.block.DepoTNT;
+import com.deponn.morino_kuma.entity.PrimedDepoTNT;
 import com.deponn.morino_kuma.item.DepoTntItem;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockSource;
+import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -28,6 +35,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.antlr.v4.runtime.atn.BlockEndState;
 import org.slf4j.Logger;
 
 // この値はMETA-INF/mods.tomlファイルのエントリと一致する必要があります
@@ -49,6 +57,8 @@ public class MorinoKuma
 public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt", DepoTNT::new);
     // 名前空間とパスを組み合わせたid "morino_kuma:depo_tnt"で新しいBlockItemを作成します
     public static final RegistryObject<Item> DEPO_TNT_ITEM = ITEMS.register("depo_tnt",
+            () -> new BlockItem(DEPO_TNT.get(), new Item.Properties()));
+    public static final RegistryObject<Item> DEPO_TNT_THROWABLE_ITEM = ITEMS.register("depo_tnt_throwable",
             () -> new DepoTntItem(new Item.Properties()));
 
     public MorinoKuma(FMLJavaModLoadingContext context)
@@ -71,6 +81,8 @@ public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt",
 // アイテムをクリエイティブタブに登録します
         modEventBus.addListener(this::addCreative);
 
+        modEventBus.addListener(this::setup);
+
 // Forgeが設定ファイルを作成して読み込むことができるように、modのForgeConfigSpecを登録します
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
@@ -91,8 +103,10 @@ public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt",
 // 例のブロックアイテムを建築ブロックタブに追加します
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
+        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(DEPO_TNT_ITEM);
+            event.accept(DEPO_TNT_THROWABLE_ITEM);
+        }
     }
 
 // SubscribeEventを使用して、Event Busが呼び出すメソッドを発見できるようにします
@@ -114,5 +128,48 @@ public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt",
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
+    }
+
+    private void setup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            // ディスペンサーのカスタム挙動登録
+            DispenserBlock.registerBehavior(DEPO_TNT_ITEM.get(), new DefaultDispenseItemBehavior() {
+                @Override
+                protected ItemStack execute(BlockSource source, ItemStack stack) {
+                    Level level = source.getLevel();
+                    Direction dir = source.getBlockState().getValue(DispenserBlock.FACING);
+                    BlockPos pos = source.getPos().relative(dir);
+
+                    PrimedDepoTNT tnt =  DepoTNTUtil.spawnPrimedTNT(level, pos,null);
+                    if (tnt != null) {
+                        // 発射方向に速度を付ける
+                        RandomSource random = level.getRandom();
+
+                        // --- 速度をランダム化 ---
+                        double baseSpeed = 3.0;
+                        double spread = 3.0; // 横方向に散る量（大きくするとバラける）
+
+                        // 基準となる前方向ベクトル
+                        double vx = dir.getStepX() * baseSpeed;
+                        double vz = dir.getStepZ() * baseSpeed;
+
+                        // ランダムな散りを加える
+                        vx += (random.nextDouble() - 0.5) * spread;
+                        vz += (random.nextDouble() - 0.5) * spread;
+
+                        // 後ろ向きになるのを防ぐ（基準方向と逆向きなら反転）
+                        if (vx * dir.getStepX() < 0) vx *= -1;
+                        if (vz * dir.getStepZ() < 0) vz *= -1;
+
+                        // 少し上向きにする
+                        double vy = 0.2 + random.nextDouble() * 0.1;
+
+                        tnt.setDeltaMovement(vx, vy, vz);
+                    }
+                    stack.shrink(1);
+                    return stack;
+                }
+            });
+        });
     }
 }

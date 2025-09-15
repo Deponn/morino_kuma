@@ -1,5 +1,6 @@
 package com.deponn.morino_kuma.item;
 
+import com.deponn.morino_kuma.DepoTNTUtil;
 import com.deponn.morino_kuma.entity.PrimedDepoTNT;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -22,18 +23,7 @@ public class DepoTntItem extends Item {
 
         if (!level.isClientSide) {
             // 空中右クリック時にPrimedDepoTNTをスポーン
-            PrimedDepoTNT tnt = new PrimedDepoTNT(
-                    level,
-                    player.getX(),
-                    player.getY() + 1.5, // プレイヤーの頭上に出す
-                    player.getZ(),
-                    player
-            );
-            level.addFreshEntity(tnt);
-
-            // 起爆音
-            level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                    SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+            DepoTNTUtil.spawnPrimedTNT(level,player.getOnPos(), player);
 
             // アイテムを1つ消費
             if (!player.getAbilities().instabuild) {

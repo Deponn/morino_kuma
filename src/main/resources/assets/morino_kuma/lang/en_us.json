@@ -1,3 +1,4 @@
 {
-  "item.morino_kuma.depo_tnt": "DEPO TNT"
+  "block.morino_kuma.depo_tnt": "DEPO TNT",
+  "item.morino_kuma.depo_tnt_throwable": "DEPO TNT THROWABLE"
 }

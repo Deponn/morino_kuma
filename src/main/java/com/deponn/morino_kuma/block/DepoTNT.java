@@ -23,18 +23,6 @@ public class DepoTNT extends Block {
         super(BlockBehaviour.Properties.copy(Blocks.TNT));
     }
 
-    /**
-     * ブロックが設置されたときに呼ばれる。設置＝起爆したい要件に対応。
-     */
-    @Override
-    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
-        // 既に同じブロックが置かれている場合は無視（更新による重複処理防止）
-        if (!level.isClientSide && !state.is(oldState.getBlock())) {
-            prime(level, pos, null);
-            level.removeBlock(pos, false);
-        }
-        super.onPlace(state, level, pos, oldState, isMoving);
-    }
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos,
