@@ -7,12 +7,14 @@ import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 
@@ -73,7 +75,7 @@ public class PrimedDepoTNT extends PrimedTnt {
 
             BlockPos ground = topPos.below();
 
-            if (level.isEmptyBlock(topPos) && !level.getBlockState(ground).is(Blocks.OAK_LEAVES)) {
+            if (level.isEmptyBlock(topPos) && isSolidGround(level.getBlockState(ground))) {
                 // 草ブロックを置く
                 level.setBlockAndUpdate(ground, Blocks.GRASS_BLOCK.defaultBlockState());
 
@@ -88,6 +90,23 @@ public class PrimedDepoTNT extends PrimedTnt {
                 }
             }
         }
+    }
+
+    private boolean isSolidGround(BlockState state) {
+        if (state == null) return false;
+
+        // 空気は当然地面じゃない
+        if (state.isAir()) return false;
+        // 葉っぱや作物などの柔らかいものは false
+        if (state.is(BlockTags.LEAVES)) return false;   // 葉っぱ
+        if (state.is(BlockTags.CROPS)) return false;   // 作物
+        if (state.is(Blocks.WATER)) return false;       // 水
+        if (state.is(Blocks.LAVA)) return false;        // 溶岩
+        if (state.is(Blocks.SNOW)) return false;        // 雪の層
+        if (state.is(Blocks.CACTUS)) return false;      // サボテン
+        if (state.is(Blocks.ICE) || state.is(Blocks.PACKED_ICE) || state.is(Blocks.BLUE_ICE)) return false; // 氷系
+        if (state.is(Blocks.MAGMA_BLOCK)) return false; // マグマブロック
+        return true;
     }
 
     // 木をはやす
