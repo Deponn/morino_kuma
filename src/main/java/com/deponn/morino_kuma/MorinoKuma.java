@@ -22,6 +22,7 @@ import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -55,9 +56,9 @@ public class MorinoKuma
     public static final RegistryObject<Item> DEPO_TNT_THROWABLE_ITEM = ITEMS.register("depo_tnt_throwable",
             () -> new DepoTntItem(new Item.Properties()));
 
-    public MorinoKuma(FMLJavaModLoadingContext context)
+    public MorinoKuma()
     {
-        IEventBus modEventBus = context.getModEventBus();
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         // modloading用のcommonSetupメソッドを登録します
         modEventBus.addListener(this::commonSetup);
@@ -78,7 +79,7 @@ public class MorinoKuma
         modEventBus.addListener(this::setup);
 
         // Forgeが設定ファイルを作成して読み込むことができるように、modのForgeConfigSpecを登録します
-        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
