@@ -37,56 +37,59 @@ import org.slf4j.Logger;
 @Mod(MorinoKuma.MOD_ID)
 public class MorinoKuma
 {
-    // すべての参照で共通の場所にmod idを定義します
+    // mod id の定義
     public static final String MOD_ID = "morino_kuma";
-    // slf4jロガーを直接参照します
+    // ロガーの作成
     private static final Logger LOGGER = LogUtils.getLogger();
-    // "morino_kuma"名前空間の下で登録されるすべてのブロックを保持するDeferred Registerを作成します
+    // ブロックのDeferred Registerの作成
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID);
-    // "morino_kuma"名前空間の下で登録されるすべてのアイテムを保持するDeferred Registerを作成します
+    // アイテムのDeferred Registerの作成
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
-    // "morino_kuma"名前空間の下で登録されるすべてのCreativeModeTabsを保持するDeferred Registerを作成します
+    // CreativeModeTabsのDeferred Registerの作成
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID);
 
-    // 名前空間とパスを組み合わせたid "morino_kuma:depo_tnt"で新しいブロックを作成します
+    //　depo_tntという名前で新しいブロックを登録
     public static final RegistryObject<Block> DEPO_TNT = BLOCKS.register("depo_tnt", DepoTNT::new);
-    // 名前空間とパスを組み合わせたid "morino_kuma:depo_tnt"で新しいBlockItemを作成します
+    //　depo_tntという名前で新しいアイテムを登録(depo_tntブロックも登録)
     public static final RegistryObject<Item> DEPO_TNT_ITEM = ITEMS.register("depo_tnt",
             () -> new BlockItem(DEPO_TNT.get(), new Item.Properties()));
+    // depo_tnt_throwableという名前でアイテムを登録
     public static final RegistryObject<Item> DEPO_TNT_THROWABLE_ITEM = ITEMS.register("depo_tnt_throwable",
             () -> new DepoTntItem(new Item.Properties()));
 
+    // 初期処理
     public MorinoKuma()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        // modloading用のcommonSetupメソッドを登録します
+        // commonSetupメソッドを登録
         modEventBus.addListener(this::commonSetup);
 
-        // ブロックが登録されるようにDeferred Registerをmodイベントバスに登録します
+        // ブロックが登録されるようにDeferred Registerをmodイベントバスに登録
         BLOCKS.register(modEventBus);
-        // アイテムが登録されるようにDeferred Registerをmodイベントバスに登録します
+        // アイテムが登録されるようにDeferred Registerをmodイベントバスに登録
         ITEMS.register(modEventBus);
-        // タブが登録されるようにDeferred Registerをmodイベントバスに登録します
+        // タブが登録されるようにDeferred Registerをmodイベントバスに登録
         CREATIVE_MODE_TABS.register(modEventBus);
 
-        // サーバーや他の興味のあるゲームイベントに自分自身を登録します
+        // サーバーや他の興味のあるゲームイベントに自分自身を登録
         MinecraftForge.EVENT_BUS.register(this);
 
-        // アイテムをクリエイティブタブに登録します
+        // アイテムをクリエイティブタブに登録
         modEventBus.addListener(this::addCreative);
 
         modEventBus.addListener(this::setup);
 
-        // Forgeが設定ファイルを作成して読み込むことができるように、modのForgeConfigSpecを登録します
+        // Forgeが設定ファイルを作成して読み込むことができるように、modのForgeConfigSpecを登録
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
+    // セットアップイベント(初期処理で登録する)(example関数)
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         // いくつかの共通セットアップコード
         LOGGER.info("HELLO FROM COMMON SETUP");
-
+        // 例：configクラスの値によってログを出力する
         if (Config.logDirtBlock)
             LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
 
@@ -95,7 +98,7 @@ public class MorinoKuma
         Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
     }
 
-    // 例のブロックアイテムを建築ブロックタブに追加します
+    // 例のブロックアイテムを建築ブロックタブに追加(初期処理で登録する)
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
@@ -104,7 +107,7 @@ public class MorinoKuma
         }
     }
 
-    // SubscribeEventを使用して、Event Busが呼び出すメソッドを発見できるようにします
+    // SubscribeEventを使用して、Event Busが呼び出すメソッドを発見できるようにする(example関数)
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
@@ -112,7 +115,7 @@ public class MorinoKuma
         LOGGER.info("HELLO from server starting");
     }
 
-    // EventBusSubscriberを使用して、@SubscribeEventで注釈されたクラスのすべての静的メソッドを自動的に登録します
+    // EventBusSubscriberを使用して、@SubscribeEventで注釈されたクラスのすべての静的メソッドを自動的に登録(example関数)
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
@@ -125,6 +128,7 @@ public class MorinoKuma
         }
     }
 
+    // セットアップイベント(初期処理で登録する)
     private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             // ディスペンサーのカスタム挙動登録

@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
-
+// 着火済みTNTのためのUtil
 public class DepoTNTUtil {
     public static PrimedDepoTNT spawnPrimedTNT(Level level, BlockPos pos, @Nullable LivingEntity owner) {
         if (level.isClientSide) return null;
