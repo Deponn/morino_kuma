@@ -1,9 +1,6 @@
 package com.deponn.morino_kuma.item;
 
-import com.deponn.morino_kuma.DepoTNTUtil;
-import com.deponn.morino_kuma.entity.PrimedDepoTNT;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
+import com.deponn.morino_kuma.entity.PrimedMoriDepoTnt;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -13,9 +10,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public class DepoTntItem extends Item {
+public class ThrowableMoriDepoTntItem extends Item {
 
-    public DepoTntItem(Properties properties) {
+    public ThrowableMoriDepoTntItem(Properties properties) {
         super(properties);
     }
 
@@ -26,7 +23,7 @@ public class DepoTntItem extends Item {
 
         if (!level.isClientSide) {
             // 空中右クリック時にPrimedDepoTNTをスポーン
-            PrimedDepoTNT tnt =  DepoTNTUtil.spawnPrimedTNT(level,player.getOnPos(), player);
+            PrimedMoriDepoTnt tnt =  PrimedMoriDepoTnt.spawnPrimedTNT(level,player.getOnPos(), player);
             if (tnt != null) {
                 // 発射方向に速度を付ける
                 RandomSource random = level.getRandom();

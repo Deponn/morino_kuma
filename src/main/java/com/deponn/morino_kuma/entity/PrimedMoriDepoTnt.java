@@ -18,10 +18,31 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 
-public class PrimedDepoTNT extends PrimedTnt {
+import javax.annotation.Nullable;
 
-    public PrimedDepoTNT(Level level, double x, double y, double z, LivingEntity owner) {
+public class PrimedMoriDepoTnt extends PrimedTnt {
+
+    public PrimedMoriDepoTnt(Level level, double x, double y, double z, LivingEntity owner) {
         super(level, x, y, z, owner);
+    }
+
+    public static PrimedMoriDepoTnt spawnPrimedTNT(Level level, BlockPos pos, @Nullable LivingEntity owner) {
+        if (level.isClientSide) return null;
+
+        PrimedMoriDepoTnt tnt = new PrimedMoriDepoTnt(
+                level,
+                pos.getX(),
+                pos.getY() + 1.5, // プレイヤーの頭上に出す
+                pos.getZ(),
+                owner
+        );
+        level.addFreshEntity(tnt);
+
+        // 起爆音
+        level.playSound(null,pos.getX(), pos.getY(), pos.getZ(),
+                SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+        return tnt;
     }
 
     // 爆発時

@@ -1,6 +1,6 @@
 package com.deponn.morino_kuma.block;
 
-import com.deponn.morino_kuma.entity.PrimedDepoTNT;
+import com.deponn.morino_kuma.entity.PrimedMoriDepoTnt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -16,9 +16,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class DepoTNT extends Block {
+public class MoriDepoTntBlock extends Block {
 
-    public DepoTNT() {
+    public MoriDepoTntBlock() {
         super(BlockBehaviour.Properties.copy(Blocks.TNT));
     }
 
@@ -53,7 +53,7 @@ public class DepoTNT extends Block {
      * fuse はティック数（20ティック＝1秒）で指定。
      */
     private void prime(Level level, BlockPos pos, LivingEntity igniter) {
-        PrimedDepoTNT customTnt = new PrimedDepoTNT(level,
+        PrimedMoriDepoTnt customTnt = new PrimedMoriDepoTnt(level,
                 pos.getX() + 0.5,
                 pos.getY(),
                 pos.getZ() + 0.5,
