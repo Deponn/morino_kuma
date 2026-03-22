@@ -6,11 +6,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class MoriDepoTntBehavior {
     public static void setupBehavior(final FMLCommonSetupEvent event) {
@@ -18,28 +19,24 @@ public class MoriDepoTntBehavior {
             // ディスペンサーのカスタム挙動登録
             DispenserBlock.registerBehavior(MorinoKumaItems.MORI_DEPO_TNT_ITEM.get(), new DefaultDispenseItemBehavior() {
                 @Override
-                protected ItemStack execute(BlockSource source, ItemStack stack) {
+                protected @NotNull ItemStack execute(@NotNull BlockSource source, @NotNull ItemStack stack) {
                     Level level = source.getLevel();
                     Direction dir = source.getBlockState().getValue(DispenserBlock.FACING);
+                    // 発射口の位置
                     BlockPos pos = source.getPos().relative(dir);
+                    Vec3 posVec = new Vec3(
+                            pos.getX() + 0.5,
+                            pos.getY(),
+                            pos.getZ() + 0.5
+                    );
+                    // 上方向に速度あり
+                    Vec3 dirVec = new Vec3(
+                            0,
+                            1,
+                            0
+                    );
 
-                    PrimedMoriDepoTnt tnt =  PrimedMoriDepoTnt.spawnPrimedTNT(level, pos,null);
-                    if (tnt != null) {
-                        // 発射方向に速度を付ける
-                        double baseSpeed = 0.1;
-                        double vx = dir.getStepX() * baseSpeed;
-                        double vy = baseSpeed * 0.5;
-                        double vz = dir.getStepZ() * baseSpeed;
-
-                        // --- 速度をランダム化 ---
-                        RandomSource random = level.getRandom();
-                        double spread = 0.5;
-                        double dx = random.nextDouble() + spread;
-                        double dy = random.nextDouble() + spread;
-                        double dz = random.nextDouble() + spread;
-
-                        tnt.setDeltaMovement(vx * dx, vy * dy, vz * dz);
-                    }
+                    PrimedMoriDepoTnt.launchPrimedTnt(level,posVec,dirVec, 0.2,0.0,0.1,null);
                     stack.shrink(1);
                     return stack;
                 }

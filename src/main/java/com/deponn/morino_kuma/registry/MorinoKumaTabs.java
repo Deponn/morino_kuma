@@ -18,7 +18,7 @@ public class MorinoKumaTabs {
                     .icon(() -> new ItemStack(MorinoKumaBlocks.MORI_DEPO_TNT_BLOCK.get()))
                     .displayItems((parameters, output) -> {
                         output.accept(MorinoKumaItems.MORI_DEPO_TNT_ITEM.get());
-                        output.accept(MorinoKumaItems.THROWABLE_MORI_DEPO_TNT_ITEM.get());
+                        output.accept(MorinoKumaItems.MORI_DEPO_GRENADE_ITEM.get());
                     })
                     .build());
 }

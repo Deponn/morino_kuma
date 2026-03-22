@@ -2,8 +2,6 @@ package com.deponn.morino_kuma.block;
 
 import com.deponn.morino_kuma.entity.PrimedMoriDepoTnt;
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,6 +13,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class MoriDepoTntBlock extends Block {
 
@@ -26,8 +26,8 @@ public class MoriDepoTntBlock extends Block {
      * 火打石で着火した場合
      */
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos,
-                                 Player player, InteractionHand hand, BlockHitResult hit) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos,
+                                          @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         if (!level.isClientSide) {
             // TNTを爆発させる
             prime(level, pos, player);
@@ -41,7 +41,7 @@ public class MoriDepoTntBlock extends Block {
      * ここでも PrimedTnt を生成して連鎖させる。
      */
     @Override
-    public void wasExploded(Level level, BlockPos pos, Explosion explosion) {
+    public void wasExploded(Level level, @NotNull BlockPos pos, @NotNull Explosion explosion) {
         if (!level.isClientSide) {
             prime(level, pos, null);
         }
@@ -53,12 +53,11 @@ public class MoriDepoTntBlock extends Block {
      * fuse はティック数（20ティック＝1秒）で指定。
      */
     private void prime(Level level, BlockPos pos, LivingEntity igniter) {
-        PrimedMoriDepoTnt customTnt = new PrimedMoriDepoTnt(level,
+        Vec3 posVec = new Vec3(
                 pos.getX() + 0.5,
                 pos.getY(),
-                pos.getZ() + 0.5,
-                igniter);
-        level.addFreshEntity(customTnt);
-        level.playSound(null, pos, SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+                pos.getZ() + 0.5
+        );
+        PrimedMoriDepoTnt.spawnPrimedTNT(level,posVec,igniter);
     }
 }

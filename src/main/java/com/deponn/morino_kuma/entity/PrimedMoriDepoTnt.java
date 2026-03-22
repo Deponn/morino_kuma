@@ -1,5 +1,6 @@
 package com.deponn.morino_kuma.entity;
 
+import com.deponn.morino_kuma.MoriDepoUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
@@ -26,22 +28,41 @@ public class PrimedMoriDepoTnt extends PrimedTnt {
         super(level, x, y, z, owner);
     }
 
-    public static PrimedMoriDepoTnt spawnPrimedTNT(Level level, BlockPos pos, @Nullable LivingEntity owner) {
+    public static PrimedMoriDepoTnt spawnPrimedTNT(Level level, Vec3 posVec, @Nullable LivingEntity owner) {
         if (level.isClientSide) return null;
-
         PrimedMoriDepoTnt tnt = new PrimedMoriDepoTnt(
                 level,
-                pos.getX(),
-                pos.getY() + 1.5, // プレイヤーの頭上に出す
-                pos.getZ(),
+                posVec.x,
+                posVec.y,
+                posVec.z,
                 owner
         );
         level.addFreshEntity(tnt);
-
         // 起爆音
-        level.playSound(null,pos.getX(), pos.getY(), pos.getZ(),
+        level.playSound(null,posVec.x, posVec.y, posVec.z,
                 SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+        return tnt;
+    }
 
+    public static PrimedMoriDepoTnt launchPrimedTnt(Level level, Vec3 pos, Vec3 dir,double baseSpeed, double speedSpread,double dirSpread,  @Nullable LivingEntity owner) {
+        PrimedMoriDepoTnt tnt =  PrimedMoriDepoTnt.spawnPrimedTNT(level,pos,owner);
+        RandomSource random = level.getRandom();
+        // すこしランダムな方向にずらした方向ベクトル
+        Vec3 fixedDir = new Vec3(
+                dir.x * MoriDepoUtil.getRandomParameter(random,dirSpread),
+                dir.y * MoriDepoUtil.getRandomParameter(random,dirSpread),
+                dir.z * MoriDepoUtil.getRandomParameter(random,dirSpread)
+        ).normalize();
+        // すこしランダムにずらしたスピード
+        double speed = baseSpeed * MoriDepoUtil.getRandomParameter(random,speedSpread);
+        if (tnt != null) {
+            // 発射方向に速度を付ける
+            double vx = fixedDir.x * speed;
+            double vy = fixedDir.y * speed;
+            double vz = fixedDir.z * speed;
+
+            tnt.setDeltaMovement(vx, vy, vz);
+        }
         return tnt;
     }
 
